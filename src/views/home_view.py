@@ -12,7 +12,7 @@ class Home:
         self.selected_card_product = None #clicar na lista de compras
         self.selected_cart_control = None #controlador para ver se esta clicado ou nao
 
-        self.total_text = ft.Text("Total: $0.00", size=18, weight="bold", color=ft.Colors.BLACK26)
+        self.total_text = ft.Text("Total: $0.00", size=18, weight="bold", color=ft.Colors.BLACK_26)
 
         self.product_list = ft.ListView(
             width=400,
@@ -28,54 +28,6 @@ class Home:
             
         )
 
-        # Drawer de navegação
-        self.page.drawer = ft.NavigationDrawer(
-            on_change=self.navigate,
-            controls=[
-                ft.Container(height=50),
-                ft.NavigationDrawerDestination(
-                    icon=ft.Icons.INVENTORY, label="Produtos"
-                ),
-                ft.NavigationDrawerDestination(
-                    icon=ft.Icons.LOGOUT, label="Sair"
-                ),
-            ]
-        )
-
-    def _open_drawer(self, e):
-        """Abre o menu lateral"""
-        self.page.drawer.open = True
-        self.page.update()
-
-    def navigate(self, e):
-        """Gerencia a navegação do menu"""
-        index = e.control.selected_index
-
-        # Fecha o drawer após selecionar
-        self.page.drawer.open = False
-        self.page.update()
-
-        if index == 0:
-            pass  # Dashboard (futuro)
-        
-        """
-        elif index == 1:
-            from .product_view import ProdutosView
-            ProdutosView(self.page).build()
-
-        elif index == 2:
-            from .fornecedores_view import FornecedoresView
-            FornecedoresView(self.page).build()
-
-        elif index == 3:
-            from .estoque_view import EstoqueView
-            EstoqueView(self.page).build()
-
-        elif index == 4:
-            print("Logout (em desenvolvimento)")
-        """
-
-    # ================= PRODUTOS =================
 
     def load_products(self):
         self.product_list.controls.clear()
@@ -312,14 +264,14 @@ class Home:
                         "Faça o pedido do cliente!",
                         size=24,
                         weight="bold",
-                        color=ft.Colors.BLACK87
+                        color=ft.Colors.BLACK_87
                     ),
 
                     ft.Divider(height=15, color=ft.Colors.TRANSPARENT),
 
                     styled_product_list,
 
-                    ft.ElevatedButton(
+                    ft.Button(
                         text="ADICIONAR PRODUTO",
                         width=300,
                         height=45,
@@ -345,14 +297,14 @@ class Home:
                         "Carrinho",
                         size=24,
                         weight="bold",
-                        color=ft.Colors.BLACK87
+                        color=ft.Colors.BLACK_87
                     ),
                     ft.Divider(height=15, color=ft.Colors.TRANSPARENT),
 
 
                     styled_cart_list,
                     ft.Divider(height=15, color=ft.Colors.BLACK),
-                    ft.ElevatedButton(
+                    ft.Button(
                         text="REMOVER PRODUTO",
                         width=300,
                         height=45,
@@ -366,7 +318,7 @@ class Home:
                     ),
 
 
-                    ft.ElevatedButton(
+                    ft.Button(
                         text="FINALIZAR COMPRA",
                         width=300,
                         height=45,

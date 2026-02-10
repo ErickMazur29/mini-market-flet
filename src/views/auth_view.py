@@ -20,8 +20,8 @@ class Login:
             content=ft.Column(
                 [
                     ft.Icon(ft.Icons.LOCK_PERSON_ROUNDED, size=50, color=ft.Colors.BLUE),
-                    ft.Text("Bem-vindo", size=30, weight='bold', color=ft.Colors.BLACK87),
-                    ft.Text("Acesse sua conta para continuar", color=ft.Colors.BLACK54),
+                    ft.Text("Bem-vindo", size=30, weight='bold', color=ft.Colors.BLACK_87),
+                    ft.Text("Acesse sua conta para continuar", color=ft.Colors.BLACK_54),
                     
                     ft.Divider(height=20, color=ft.Colors.TRANSPARENT), # Espaçador
                     
@@ -30,7 +30,7 @@ class Login:
                     
                     ft.Divider(height=10, color=ft.Colors.TRANSPARENT),
                     
-                    ft.ElevatedButton(
+                    ft.Button(
                         text="ENTRAR NO SISTEMA",
                         style=ft.ButtonStyle(
                             shape=ft.RoundedRectangleBorder(radius=10),
@@ -130,8 +130,8 @@ class Login:
             content= ft.Column(
                 [
                     ft.Icon(ft.Icons.LOCK_PERSON_ROUNDED, size=50, color=ft.Colors.BLUE),
-                    ft.Text("Cadastre-se por aqui!", size=30, weight='bold', color=ft.Colors.BLACK87),
-                    ft.Text("E faça parte do nosso grupo", color=ft.Colors.BLACK54),
+                    ft.Text("Cadastre-se por aqui!", size=30, weight='bold', color=ft.Colors.BLACK_87),
+                    ft.Text("E faça parte do nosso grupo", color=ft.Colors.BLACK_54),
                     ft.Divider(height=20, color=ft.Colors.TRANSPARENT), # Espaçador
 
                     self.cad_user,
@@ -139,7 +139,7 @@ class Login:
                     
                     ft.Divider(height=10, color=ft.Colors.TRANSPARENT),
                     
-                    ft.ElevatedButton(
+                    ft.Button(
                         text="CADASTRO",
                         style=ft.ButtonStyle(
                             shape=ft.RoundedRectangleBorder(radius=10),

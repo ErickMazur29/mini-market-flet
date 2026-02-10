@@ -10,4 +10,4 @@ def main(page: ft.Page):
     login_view = Login(page) 
     login_view.build()
 
-ft.app(target=main)
+ft.run(main)
