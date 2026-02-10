@@ -272,7 +272,7 @@ class Home:
                     styled_product_list,
 
                     ft.Button(
-                        text="ADICIONAR PRODUTO",
+                        "ADICIONAR PRODUTO",
                         width=300,
                         height=45,
                         style=ft.ButtonStyle(
@@ -305,7 +305,7 @@ class Home:
                     styled_cart_list,
                     ft.Divider(height=15, color=ft.Colors.BLACK),
                     ft.Button(
-                        text="REMOVER PRODUTO",
+                        "REMOVER PRODUTO",
                         width=300,
                         height=45,
                         style=ft.ButtonStyle(
@@ -319,7 +319,7 @@ class Home:
 
 
                     ft.Button(
-                        text="FINALIZAR COMPRA",
+                        "FINALIZAR COMPRA",
                         width=300,
                         height=45,
                         style=ft.ButtonStyle(

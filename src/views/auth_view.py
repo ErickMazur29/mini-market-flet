@@ -31,7 +31,7 @@ class Login:
                     ft.Divider(height=10, color=ft.Colors.TRANSPARENT),
                     
                     ft.Button(
-                        text="ENTRAR NO SISTEMA",
+                        "ENTRAR NO SISTEMA",
                         style=ft.ButtonStyle(
                             shape=ft.RoundedRectangleBorder(radius=10),
                             color=ft.Colors.WHITE,
@@ -140,7 +140,7 @@ class Login:
                     ft.Divider(height=10, color=ft.Colors.TRANSPARENT),
                     
                     ft.Button(
-                        text="CADASTRO",
+                        "CADASTRO",
                         style=ft.ButtonStyle(
                             shape=ft.RoundedRectangleBorder(radius=10),
                             color=ft.Colors.WHITE,
