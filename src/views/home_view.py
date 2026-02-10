@@ -201,28 +201,32 @@ class Home:
     def build(self):
         self.page.controls.clear()
         self.page.bgcolor = ft.Colors.WHITE
-        self.page.vertical_alignment = ft.MainAxisAlignment.CENTER
-        self.page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+        self.page.window.full_screen = True
 
         if not self.products_loaded:
             self.load_products()
             self.products_loaded = True
 
-        self.page.appbar = ft.AppBar(
-            title=ft.Text("Mini Market", size=25, weight="bold"),
-            leading=ft.IconButton(icon=ft.Icons.MENU, on_click=self._open_drawer),
-        )
+        self.page.appbar = ft.AppBar(title=ft.Text("Mini Market", size=25, weight="bold"),)
 
         styled_product_list = ft.Container(
             content=self.product_list,   
             width=400,
             height=300,
             padding=10,                
-            margin=ft.margin.only(top=10, bottom=10),  
+            margin=ft.Margin.only(top=10, bottom=10),  
             bgcolor=ft.Colors.GREY_100, 
             border_radius=12,
-            border=ft.border.all(1, ft.Colors.GREY_300),
+            border=ft.Border.all(1, ft.Colors.GREY_300),
 
+        )
+
+        navigation_tab = ft.Column(
+            [
+                ft.IconButton(icon = ft.Icons.HOME),
+                ft.IconButton(icon = ft.Icons.MENU_BOOK),
+                ft.IconButton(icon = ft.Icons.HISTORY),
+            ]
         )
 
         styled_cart_list = ft.Container(
@@ -238,14 +242,14 @@ class Home:
             padding=10,
             border_radius=12,
             bgcolor=ft.Colors.GREY_100, 
-            border=ft.border.all(1, ft.Colors.GREY_300)
+            border=ft.Border.all(1, ft.Colors.GREY_300)
         )
 
         card_style = {
             "bgcolor": ft.Colors.WHITE,
             "padding": 30,
-            "width": 420,
-            "height": 650,
+            "width": 350,
+            "height": 600,
             "border_radius": 20,
             "shadow": ft.BoxShadow(
                 blur_radius=15,
@@ -339,15 +343,22 @@ class Home:
 
         #RODAR OS DOIS CARDS
 
-        juntar = ft.Row(
-            controls=[
-                home_card,
-                cart_card
-                ],
-                alignment=ft.MainAxisAlignment.CENTER,
-                spacing=20
+        juntar = ft.Column(
+            [
+                ft.Text(" MERCADINHO FLET ", size=35, weight='bold'),
+                ft.Row(
+                    controls=[
+                        navigation_tab,
+                        home_card,
+                        cart_card
+                        ],
+                        alignment=ft.MainAxisAlignment.CENTER,
+                        spacing=20
 
 
             )
+            ],
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER
+        )
         self.page.add(juntar)
         self.page.update()

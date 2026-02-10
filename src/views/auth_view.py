@@ -1,6 +1,8 @@
 import flet as ft
 from database.data import get_connection
 from views.home_view import Home
+import os
+import sys
 
 class Login:
     def __init__(self, page : ft.Page):
@@ -14,6 +16,9 @@ class Login:
         self.page.bgcolor = ft.Colors.WHITE
         self.page.vertical_alignment = ft.MainAxisAlignment.CENTER
         self.page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+        self.page.window.maximized = True
+
+        self.page.appbar = ft.AppBar(title=ft.Text("Mini Market", size=25, weight="bold"),)
         
 
         login_card = ft.Container(

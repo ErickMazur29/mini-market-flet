@@ -22,27 +22,47 @@ def create_table():
         conn.commit()
 
         cursor.execute("""
-                CREATE TABLE IF NOT EXISTS produtos(
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    nome TEXT NOT NULL,
-                    preco REAL NOT NULL,
-                    quantidade INTEGER
-                    )
-            """)
+            CREATE TABLE IF NOT EXISTS produtos(
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nome TEXT NOT NULL,
+                preco REAL NOT NULL,
+                quantidade INTEGER
+                )
+        """)
         conn.commit()
 
         cursor.execute("""
             INSERT INTO produtos (nome, preco, quantidade) VALUES
-            ('Arroz 5kg', '25.90', 50),
-            ('Feijão 1kg', '8.50', 80),
-            ('Macarrão', '4.20', 100),
-            ('Açúcar 1kg', '4.80', 70),
-            ('Óleo de Soja', '7.90', 60),
-            ('Leite 1L', '4.50', 120),
-            ('Café 500g', '14.90', 40),
-            ('Farinha de Trigo 1kg', '6.30', 55),
-            ('Biscoito', '3.50', 90),
-            ('Refrigerante 2L', '8.99', 45)
+                ('Arroz 5kg', 24.90, 50),
+                ('Feijão Carioca 1kg', 7.50, 100),
+                ('Azeite de Oliva 500ml', 35.00, 30),
+                ('Café Torrado 500g', 18.90, 80),
+                ('Açúcar Refinado 1kg', 4.20, 200),
+                ('Macarrão Espaguete 500g', 3.80, 150),
+                ('Óleo de Soja 900ml', 6.50, 120),
+                ('Leite Integral 1L', 4.90, 300),
+                ('Farinha de Trigo 1kg', 5.10, 90),
+                ('Sal Refinado 1kg', 2.50, 100),
+                ('Molho de Tomate 300g', 2.90, 200),
+                ('Biscoito Recheado', 2.50, 150),
+                ('Sabão em Pó 1kg', 12.00, 60),
+                ('Detergente Líquido', 1.99, 250),
+                ('Desinfetante 1L', 5.50, 70),
+                ('Amaciante 2L', 15.00, 40),
+                ('Papel Higiênico 4un', 6.00, 100),
+                ('Shampoo 400ml', 12.50, 50),
+                ('Sabonete Barra', 1.50, 400),
+                ('Creme Dental', 3.20, 180),
+                ('Alface Americana', 3.00, 40),
+                ('Tomate Longa Vida kg', 6.00, 60),
+                ('Banana Prata kg', 4.50, 80),
+                ('Maçã Gala kg', 7.00, 70),
+                ('Batata Inglesa kg', 5.00, 100),
+                ('Cebola kg', 4.00, 120),
+                ('Peito de Frango kg', 16.00, 50),
+                ('Carne Moída kg', 25.00, 40),
+                ('Pão de Forma', 5.50, 60),
+                ('Iogurte Natural 170g', 2.80, 100);
         """)
         conn.commit()
 
@@ -65,6 +85,11 @@ def create_table():
                 FOREIGN KEY (id_venda) REFERENCES vendas(id),
                 FOREIGN KEY (id_produto) REFERENCES produtos(id)
                 )
+        """)
+        conn.commit()
+
+        cursor.execute("""
+            DELETE FROM produtos WHERE id >30
         """)
         conn.commit()
 
