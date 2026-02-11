@@ -1,6 +1,7 @@
 import flet as ft
 from database.data import get_connection
 from datetime import datetime
+from views.history_view import Historico
 
 class Home:
     def __init__(self, page: ft.Page):
@@ -224,8 +225,7 @@ class Home:
         navigation_tab = ft.Column(
             [
                 ft.IconButton(icon = ft.Icons.HOME),
-                ft.IconButton(icon = ft.Icons.MENU_BOOK),
-                ft.IconButton(icon = ft.Icons.HISTORY),
+                ft.IconButton(icon = ft.Icons.HISTORY, on_click= lambda e: Historico(self.page).load_history()),
             ]
         )
 
