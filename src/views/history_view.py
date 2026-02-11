@@ -1,6 +1,6 @@
 import flet as ft
 from database.data import get_connection
-from database.services import existe_historico_vendas
+from services.vendas_service import existe_historico_vendas
 
 class Historico:
     def __init__(self, page, router):
@@ -65,6 +65,8 @@ class Historico:
         self.page.appbar = ft.AppBar(title=ft.Text("Mini Market", size=25, weight="bold"),)
 
         self.load_history()
+        
+        from views.home_view import Home
 
         if not existe_historico_vendas():
             self.page.add(
@@ -72,12 +74,16 @@ class Historico:
                     "Não há histórico ainda.",
                     size=30,
                     weight="bold",
+                ),
+                ft.Button(
+                    "Voltar",
+                    on_click=lambda e: self.router.go("home", Home)
                 )
             )
             self.page.update()
             return
 
-        from views.home_view import Home
+        
 
         navigation_tab = ft.Column(
             [
