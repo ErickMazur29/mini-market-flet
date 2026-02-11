@@ -31,7 +31,9 @@ def create_table():
         """)
         conn.commit()
 
-        cursor.execute("""
+        cursor.execute("SELECT COUNT(*) FROM produtos")
+        if cursor.fetchone()[0] == 0:
+            cursor.execute("""
             INSERT INTO produtos (nome, preco, quantidade) VALUES
                 ('Arroz 5kg', 24.90, 50),
                 ('Feijão Carioca 1kg', 7.50, 100),

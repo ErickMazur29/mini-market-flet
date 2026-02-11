@@ -1,13 +1,11 @@
 import flet as ft
-from views.auth_view import Login
+from router import Router
+from views.login_view import Login
 from database.data import create_table
 
 def main(page: ft.Page):
-    create_table() #para criar as nossas tabelas no banco de dados
-    
-    page.title= "Sistema de Gestão de Estoque"
+    create_table()
+    router = Router(page)
+    router.go("login", Login)
 
-    login_view = Login(page) 
-    login_view.build()
-
-ft.run(main)
+ft.app(target=main)

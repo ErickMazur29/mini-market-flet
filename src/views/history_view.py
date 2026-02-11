@@ -1,71 +1,91 @@
 import flet as ft
 from database.data import get_connection
-from views.home_view import Home
+from database.services import existe_historico_vendas
 
 class Historico:
-    def __init__(self, page:ft.Page):
+    def __init__(self, page, router):
         self.page = page
+        self.router = router
 
         self.history_list = ft.ListView(
-            width=500,
-            height=300,
-            spacing=5,
-        )
-
-        self.product_list = ft.ListView(
-            width=400,
-            height=250,
+            width=1500,
+            height=700,
             spacing=5,
         )
 
     def load_history(self):
-        self.page.controls.clear()
-        self.page.bgcolor = ft.Colors.WHITE
-        self.page.window.full_screen = True
-        self.page.appbar = ft.AppBar(title=ft.Text("Mini Market", size=25, weight="bold"),)
+        self.history_list.controls.clear()
 
-        self.product_list.controls.clear()
-
-        navigation_tab = ft.Column(
-            [
-                ft.IconButton(icon = ft.Icons.HOME, on_click= lambda e: Home(self.page).build()),
-                ft.IconButton(icon = ft.Icons.HISTORY),
-            ]
-        )
-        
         with get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute("""
-            SELECT p.nome, p.preco, v.data, v.total FROM itens_venda as iv
-            JOIN produtos as p ON iv.id_produto = p.id
-            JOIN vendas as v ON iv.id_venda = v.id
-            """)
-            for p_nome, p_preco, v_data, v_total in cursor.fetchall():
+            cursor.execute("SELECT id, data, total FROM vendas ORDER BY id DESC")
+            vendas = cursor.fetchall()
+            for venda_id, venda_data, venda_total in vendas:
 
-                self.product_list.controls.append(
-                    ft.Container(
-                        content=ft.Row(
-                            controls=[
-                                ft.Text(p_nome, color=ft.Colors.BLACK),
-                                ft.Text(f" - ${p_preco}", color=ft.Colors.BLACK)
-                            ]
-                        ),
-                        padding=10,
-                        border_radius=8,
-                        bgcolor=ft.Colors.BLUE_50,
-                    )
+                product_list = ft.ListView(
+                    width=600,
+                    height=300,
+                    spacing=5,
                 )
+
+                cursor.execute("""
+                    SELECT p.nome, iv.preco FROM itens_venda as iv
+                    JOIN produtos p ON p.id = iv.id_produto
+                    WHERE iv.id_venda = ? 
+                    """, (venda_id,))
+                
+                for nome, preco in cursor.fetchall():
+                    product_list.controls.append(
+                        ft.Text(f"{nome} - RS {preco: .2f}", color=ft.Colors.BLACK)
+                    )
 
                 self.history_list.controls.append(
                     ft.Container(
                         content=ft.Column(
                             [
-                                ft.Text(f"Dia: {v_data} - Total: {v_total}"),
-                                self.product_list
+                                ft.Text(f"Data: {venda_data}", weight="bold"),
+                                ft.Text(f"Total: R${venda_total}", weight="bold"),
+                                product_list
                             ]
-                        )
+                        ),
+                    padding=15,
+                    border_radius=10,
+                    bgcolor=ft.Colors.GREY_100,
+                    border=ft.Border.all(1, ft.Colors.GREY_300)
                     )
                 )
+
+
+        
+
+    def build(self):
+        self.page.controls.clear()
+        self.page.bgcolor = ft.Colors.WHITE
+        self.page.window.full_screen = True
+        self.page.appbar = ft.AppBar(title=ft.Text("Mini Market", size=25, weight="bold"),)
+
+        self.load_history()
+
+        if not existe_historico_vendas():
+            self.page.add(
+                ft.Text(
+                    "Não há histórico ainda.",
+                    size=30,
+                    weight="bold",
+                )
+            )
+            self.page.update()
+            return
+
+        from views.home_view import Home
+
+        navigation_tab = ft.Column(
+            [
+                ft.IconButton(icon = ft.Icons.HOME, on_click=lambda e: self.router.go("home", Home)),
+                ft.IconButton(icon = ft.Icons.HISTORY),
+            ]
+        )
+        
 
         juntar = ft.Column(
             [

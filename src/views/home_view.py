@@ -4,8 +4,9 @@ from datetime import datetime
 from views.history_view import Historico
 
 class Home:
-    def __init__(self, page: ft.Page):
+    def __init__(self, page, router):
         self.page = page
+        self.router = router
 
         self.products_loaded = False
         self.selected_product = None #clicar na lista de produtos
@@ -203,6 +204,7 @@ class Home:
         self.page.controls.clear()
         self.page.bgcolor = ft.Colors.WHITE
         self.page.window.full_screen = True
+        from views.history_view import Historico
 
         if not self.products_loaded:
             self.load_products()
@@ -225,7 +227,7 @@ class Home:
         navigation_tab = ft.Column(
             [
                 ft.IconButton(icon = ft.Icons.HOME),
-                ft.IconButton(icon = ft.Icons.HISTORY, on_click= lambda e: Historico(self.page).load_history()),
+                ft.IconButton(icon = ft.Icons.HISTORY, on_click=lambda e: self.router.go("historico", Historico)),
             ]
         )
 
