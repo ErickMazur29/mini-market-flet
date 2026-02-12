@@ -1,5 +1,6 @@
 import flet as ft
-from database.data import get_connection
+from services.user_service import login_user
+from utils.notifications import build_snack
 
 class Login:
     def __init__(self, page, router):
@@ -68,20 +69,6 @@ class Login:
         self.page.add(login_card)
         self.page.update()
 
-        #NOTIFCAÇÕES
-
-    def mostrar_notificacao(self, mensagem, cor=ft.Colors.RED):
-        snack = ft.SnackBar(
-            content=ft.Text(mensagem, color=ft.Colors.WHITE),
-            bgcolor=cor,
-            duration=1000,
-            show_close_icon=True
-        )
-        self.page.overlay.clear()
-        self.page.overlay.append(snack)
-        snack.open = True
-        self.page.update()
-
         #ENTRADA
         
     def login_entrada(self, e):
@@ -90,30 +77,22 @@ class Login:
 
         if not usuario or not senha:
             # Chamada da notificação de erro
-            self.mostrar_notificacao("Preencha todos os campos!")
+            build_snack(self.page, "Preencha todos os campos")
             return
         
-        with get_connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute(
-                'SELECT password FROM usuarios WHERE user_name = ?', (usuario,)
-            )
-            resultado = cursor.fetchone()
+        success, msg = login_user(usuario, senha)
 
-            if resultado is None:
-                self.mostrar_notificacao("Usuario nao cadastrado!")
-                self.password.value = ""
-                self.page.update()
-                return
-            
-            senha_existente = resultado[0]
+        build_snack(
+            self.page,
+            msg,
+            ft.Colors.GREEN if success else ft.Colors.RED
+        )
 
-            if senha == senha_existente:
-                from views.home_view import Home
-                self.router.go("home", Home)
-                self.mostrar_notificacao("Login realizado com sucesso!", ft.Colors.GREEN)
+        
+        if success:
+            from views.home_view import Home
+            self.router.go("home", Home)
 
-            else:
-                self.mostrar_notificacao("Senha Incorreta!")
-                self.password.value = ""
-                self.page.update()
+        else:
+            self.password.value = ""
+            self.page.update()

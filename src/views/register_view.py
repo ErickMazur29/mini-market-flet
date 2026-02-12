@@ -1,14 +1,12 @@
 import flet as ft
-from database.data import get_connection
+from utils.notifications import build_snack
+from services.user_service import crate_account
 
 class Register:
 
     def __init__(self, page, router):
             self.page = page
             self.router = router
-
-            self.username = ft.TextField(label="Usuario", color=ft.Colors.BLACK)
-            self.password = ft.TextField(label="Senha", password=True, can_reveal_password=True, color=ft.Colors.BLACK)
 
     def cadastrar_usuario(self, e):
 
@@ -17,44 +15,19 @@ class Register:
 
         if not usuario or not senha:
             # Chamada da notificação de erro
-            self.mostrar_notificacao("Preencha todos os campos!")
+            build_snack(self.page, "Preencha todos os campos")
             return
         
-        try:
-            # Conecta ao banco de dados
-            with get_connection() as conn:
-                cursor = conn.cursor()
+        success, msg = crate_account(usuario, senha)
 
-                # Insere o novo usuário no banco
-                cursor.execute(
-                    'INSERT INTO usuarios (user_name, password) VALUES (?, ?)',
-                    (usuario, senha)
-                )
-                conn.commit()
+        if not success:
+             build_snack(self.page, msg)
+             return
+        
+        build_snack(self.page, msg, ft.Colors.GREEN)
 
-                self.cad_user.value = ""
-                self.cad_password.value = ""
-                self.build()
-                self.mostrar_notificacao("Cadastro realizado com sucesso!", ft.Colors.GREEN)
-
-        except Exception as ex:
-            if "UNIQUE" in str(ex).upper():
-                self.mostrar_notificacao("Este usuário já existe!")
-            else:
-                self.mostrar_notificacao(f"Erro ao cadastrar: {ex}")
-
-
-    def mostrar_notificacao(self, mensagem, cor=ft.Colors.RED):
-        snack = ft.SnackBar(
-            content=ft.Text(mensagem, color=ft.Colors.WHITE),
-            bgcolor=cor,
-            duration=1000,
-            show_close_icon=True
-        )
-        self.page.overlay.clear()
-        self.page.overlay.append(snack)
-        snack.open = True
-        self.page.update()
+        from views.login_view import Login
+        self.router.go("login", Login)
 
     def build(self):
         self.page.bgcolor = ft.Colors.WHITE

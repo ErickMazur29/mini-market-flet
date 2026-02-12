@@ -1,6 +1,6 @@
 import flet as ft
 from database.data import get_connection
-from services.vendas_service import existe_historico_vendas
+from services.sale_service import existe_historico_vendas
 
 class Historico:
     def __init__(self, page, router):
