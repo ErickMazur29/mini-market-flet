@@ -25,7 +25,7 @@ def botao_padrao_home(text, on_click, tipo: ButtonType):
     }
 
     return ft.Button(
-        text=text,
+        text,
         width=300,
         height=45,
         style=ft.ButtonStyle(

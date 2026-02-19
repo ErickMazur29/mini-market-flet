@@ -1,6 +1,9 @@
 import flet as ft
-from utils.notifications import build_snack
+from utils.notifications import build_snack #notificação
 from services.user_service import crate_account
+from components.card import card_padrao_login
+from components.button import botao_padrao_home
+from utils.constants import ButtonType
 
 class Register:
 
@@ -52,18 +55,8 @@ class Register:
                     self.cad_password,
                     
                     ft.Divider(height=10, color=ft.Colors.TRANSPARENT),
-                    
-                    ft.Button(
-                        "CADASTRO",
-                        style=ft.ButtonStyle(
-                            shape=ft.RoundedRectangleBorder(radius=10),
-                            color=ft.Colors.WHITE,
-                            bgcolor=ft.Colors.BLUE,
-                        ),
-                        width=300,
-                        height=50,
-                        on_click= self.cadastrar_usuario
-                    ),
+
+                    botao_padrao_home("CADASTRO", self.cadastrar_usuario, ButtonType.PRIMARY),
                     
                     ft.TextButton(
                         content=ft.Text("Ja possui cadastro? Entre por aqui!", size=12),
@@ -74,15 +67,7 @@ class Register:
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                 spacing=15,
             ),
-            bgcolor=ft.Colors.WHITE,
-            padding=40,
-            width=400, 
-            border_radius=20,
-            shadow=ft.BoxShadow(
-                blur_radius=15,
-                color=ft.Colors.with_opacity(0.2, ft.Colors.BLACK),
-                offset=ft.Offset(0, 5),
-            ),
+            **card_padrao_login()
         )
         self.page.controls.clear()
         self.page.add(cadastro_card)

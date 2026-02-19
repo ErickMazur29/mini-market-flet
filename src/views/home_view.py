@@ -1,12 +1,17 @@
 import flet as ft
 from services.cart_service import calculate_total
-from services.sale_service import finalize_sale
-from services.product_service import get_all_products
-from components.navbar import _navigation
-from components.navbar import _appbar
-from components.card import card_padrao_home
-from components.card import style_cart_list
-from components.card import style_product_list
+from services.sale_service import finalize_sale 
+from services.product_service import get_all_products 
+from components.navbar import _navigation_history #navegação para historico
+from components.navbar import _appbar 
+from components.card import card_padrao_home #estilo de card
+from components.card import style_cart_list #estilo de list
+from components.card import style_product_list #estilo de list
+from components.card import list_text #estilo de list text
+from utils.notifications import build_snack #notificação
+from components.button import botao_padrao_home #estilo dos botões
+from utils.constants import ButtonType #cor dos botoes
+
 
 
 class Home:
@@ -36,27 +41,22 @@ class Home:
             
         )
 
-
+    #carregar os produtos na listview
     def load_products(self):
         self.product_list.controls.clear()
 
         for product_id, name, price in get_all_products():
             self.product_list.controls.append(
-                ft.Container(
-                    content=ft.Row(
-                        controls=[
-                            ft.Text(name, color=ft.Colors.BLACK),
-                            ft.Text(f" - ${price}", color=ft.Colors.BLACK)
-                        ]
-                    ),
-                    padding=10,
-                    border_radius=8,
-                    bgcolor=ft.Colors.BLUE_50,
-                    data={"id": product_id, "name": name, "price": price},
-                    on_click=self.select_product
-                )
+                list_text(
+                    ft.Text(f"{name} - ${price}", color=ft.Colors.BLACK),
+                    {"id": product_id, "name": name, "price": price},
+                    ft.Colors.BLUE_50,
+                    self.select_product,
+                ),
             )
 
+
+    #selecionar os produtos da list
     def select_product(self, e):
         if self.selected_product_control == e.control:
             e.control.bgcolor = ft.Colors.BLUE_50
@@ -77,27 +77,27 @@ class Home:
 
     # ================= CARRINHO =================
 
+    #adicionar o carrinho
     def add_to_cart(self, e):
         if not self.selected_product:
-            self.show_snack("Selecione um produto!")
+            build_snack(self.page,"Selecione um produto!")
             return
 
         item_text = f"{self.selected_product['name']} - ${self.selected_product['price']}"
 
         self.cart_list.controls.append(
-            ft.Container(
-                content=ft.Text(item_text, color=ft.Colors.BLACK),
-                padding=8,
-                border_radius=6,
-                bgcolor=ft.Colors.GREEN_50,
-                data=self.selected_product,
-                on_click=self.select_card_item
-            )
+
+            list_text(
+                    ft.Text(item_text, color=ft.Colors.BLACK),
+                    self.selected_product,
+                    ft.Colors.GREEN_50,
+                    self.select_card_item,
+                )
         )
         self.sum_cart_list()
         self.page.update()
 
-
+    #selecionar item do carrinho
     def select_card_item(self, e):
         if self.selected_cart_control == e.control:
             e.control.bgcolor = ft.Colors.GREEN_50
@@ -117,10 +117,10 @@ class Home:
         self.page.update()
 
 
-
+    #remover do carrinho
     def remove_from_cart(self, e):
         if not self.selected_cart_control:
-            self.show_snack("Selecione um item do carrinho!")
+            build_snack(self.page,"Selecione um item do carrinho!")
             return
 
         self.cart_list.controls.remove(self.selected_cart_control)
@@ -132,36 +132,16 @@ class Home:
     # ================= SOMA TOTAL =================
 
     def sum_cart_list(self):
-        total = calculate_total(item.data for item in self.cart_list.controls)
+        cart_items = [item.data for item in self.cart_list.controls]
+        total = calculate_total(cart_items)
         self.total_text.value = f"Total: {total:.2f}"
 
-    # =============== NOTIFICAÇÃO ================
-
-    def show_snack(self, msg):
-        snack = ft.SnackBar(
-            content=ft.Text(msg, color=ft.Colors.WHITE),
-            bgcolor=ft.Colors.RED
-        )
-        self.page.overlay.clear()
-        self.page.overlay.append(snack)
-        snack.open = True
-        self.page.update()
-
-    def show_snack_final(self, msg):
-        snack = ft.SnackBar(
-            content=ft.Text(msg, color=ft.Colors.WHITE),
-            bgcolor=ft.Colors.GREEN
-        )
-        self.page.overlay.clear()
-        self.page.overlay.append(snack)
-        snack.open = True
-        self.page.update()
 
     # ============FINALIZAR COMPRA ===============
 
     def finalizar_compra(self, e):
         if len(self.cart_list.controls) == 0:
-            self.show_snack("O carrinho esta vazio!")
+            build_snack(self.page,"O carrinho esta vazio!")
             return
         
         cart_items = [item.data for item in self.cart_list.controls]
@@ -170,10 +150,10 @@ class Home:
         #limpa carrinho
         self.cart_list.controls.clear() 
         self.total_text.value = "Total: 0.00 "
-        self.select_cart_control = None
+        self.selected_cart_control = None
         self.selected_card_product = None
 
-        self.show_snack_final("Venda finalizada com sucesso!")
+        build_snack(self.page,"Venda finalizada com sucesso!", ft.Colors.GREEN)
         self.page.update()
 
     # ================= BUILD ====================
@@ -182,14 +162,15 @@ class Home:
         self.page.controls.clear()
         self.page.bgcolor = ft.Colors.WHITE
         self.page.window.full_screen = True
+        self.page.appbar = _appbar("Mini Market Flet")
+
         from views.history_view import Historico
 
         if not self.products_loaded:
             self.load_products()
             self.products_loaded = True
 
-        appbar = _appbar("Mini Market Flet")
-        navegacao = _navigation(lambda e: self.router.go("history", Historico))
+        navegacao = _navigation_history(lambda e: self.router.go("history", Historico))
 
         # ================= CARD PRODUTOS =================
 
@@ -205,42 +186,14 @@ class Home:
 
                     ft.Divider(height=15, color=ft.Colors.TRANSPARENT),
 
-                    ft.Container(
-                        content=self.product_list,
-                        width=400,
-                        height=300,
-                        padding=10,
-                        margin=ft.Margin.only(top=10, bottom=10),
-                        bgcolor=ft.Colors.GREY_100,
-                        border_radius=12,
-                        border=ft.Border.all(1, ft.Colors.GREY_300),
-                    ),
+                    style_product_list(self.product_list),
 
-                    ft.Button(
-                        "ADICIONAR PRODUTO",
-                        width=300,
-                        height=45,
-                        style=ft.ButtonStyle(
-                            bgcolor=ft.Colors.BLUE,
-                            color=ft.Colors.WHITE,
-                            shape=ft.RoundedRectangleBorder(radius=10),
-                        ),
-                        on_click=self.add_to_cart
-                    )
+                    botao_padrao_home("ADICIONAR PRODUTO",self.add_to_cart, ButtonType.PRIMARY),
                 ],
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                 spacing=12
             ),
-            bgcolor=ft.Colors.WHITE,
-            padding=30,
-            width=350,
-            height=600,
-            border_radius=20,
-            shadow=ft.BoxShadow(
-                blur_radius=15,
-                color=ft.Colors.with_opacity(0.2, ft.Colors.BLACK),
-                offset=ft.Offset(0, 5),
-            ),
+            **card_padrao_home(),
         )
 
         # ================= CARD CARRINHO =================
@@ -257,55 +210,18 @@ class Home:
 
                     ft.Divider(height=15, color=ft.Colors.TRANSPARENT),
 
-                    ft.Container(
-                        content=self.cart_list,
-                        width=400,
-                        height=300,
-                        padding=10,
-                        bgcolor=ft.Colors.GREY_100,
-                        border_radius=12,
-                        border=ft.Border.all(1, ft.Colors.GREY_300),
-                    ),
+                    style_cart_list(content=self.cart_list),
 
                     ft.Divider(height=15, color=ft.Colors.BLACK),
 
-                    ft.Button(
-                        "REMOVER PRODUTO",
-                        width=300,
-                        height=45,
-                        style=ft.ButtonStyle(
-                            bgcolor=ft.Colors.GREEN,
-                            color=ft.Colors.WHITE,
-                            shape=ft.RoundedRectangleBorder(radius=10),
-                        ),
-                        on_click=self.remove_from_cart
-                    ),
+                    botao_padrao_home("REMOVER PRODUTO",self.remove_from_cart, ButtonType.SUCCESS),
+                    botao_padrao_home("FINALIZAR COMPRA",self.finalizar_compra, ButtonType.DANGER),
 
-                    ft.Button(
-                        "FINALIZAR COMPRA",
-                        width=300,
-                        height=45,
-                        style=ft.ButtonStyle(
-                            bgcolor=ft.Colors.RED,
-                            color=ft.Colors.WHITE,
-                            shape=ft.RoundedRectangleBorder(radius=10),
-                        ),
-                        on_click=self.finalizar_compra
-                    )
                 ],
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                 spacing=12
             ),
-            bgcolor=ft.Colors.WHITE,
-            padding=30,
-            width=350,
-            height=600,
-            border_radius=20,
-            shadow=ft.BoxShadow(
-                blur_radius=15,
-                color=ft.Colors.with_opacity(0.2, ft.Colors.BLACK),
-                offset=ft.Offset(0, 5),
-            ),
+            **card_padrao_home(),
         )
 
         # ================= LAYOUT =================

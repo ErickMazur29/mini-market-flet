@@ -1,6 +1,9 @@
 import flet as ft
 from services.user_service import login_user
 from utils.notifications import build_snack
+from components.card import card_padrao_login
+from components.button import botao_padrao_home
+from utils.constants import ButtonType
 
 class Login:
     def __init__(self, page, router):
@@ -34,18 +37,8 @@ class Login:
                     self.password,
                     
                     ft.Divider(height=10, color=ft.Colors.TRANSPARENT),
-                    
-                    ft.Button(
-                        "ENTRAR NO SISTEMA",
-                        style=ft.ButtonStyle(
-                            shape=ft.RoundedRectangleBorder(radius=10),
-                            color=ft.Colors.WHITE,
-                            bgcolor=ft.Colors.BLUE,
-                        ),
-                        width=300,
-                        height=50,
-                        on_click=self.login_entrada
-                    ),
+
+                    botao_padrao_home("ENTRAR", self.login_entrada, ButtonType.PRIMARY),
                     
                     ft.TextButton(
                         content=ft.Text("Não possui cadastro? Cadastre-se agora!", size=12),
@@ -55,15 +48,7 @@ class Login:
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                 spacing=15,
             ),
-            bgcolor=ft.Colors.WHITE,
-            padding=40,
-            width=400, 
-            border_radius=20,
-            shadow=ft.BoxShadow(
-                blur_radius=15,
-                color=ft.Colors.with_opacity(0.2, ft.Colors.BLACK),
-                offset=ft.Offset(0, 5),
-            ),
+            **card_padrao_login()
         )
         self.page.controls.clear()
         self.page.add(login_card)
