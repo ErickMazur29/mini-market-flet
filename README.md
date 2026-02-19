@@ -71,3 +71,27 @@ MINI-MARKET-FLET/
 ## 📌 Observações
 
 Projeto desenvolvido para fins de estudo e aprimoramento técnico.
+
+## ⚙️ Como Executar
+
+### 1️⃣ Clone o repositório
+
+git clone https://github.com/seu-usuario/seu-repositorio.git
+cd seu-repositorio
+
+
+### 2️⃣ Crie um ambiente virtual (opcional, recomendado)
+
+python -m venv venv
+source venv/bin/activate # Linux/macOS
+venv\Scripts\activate # Windows
+
+
+### 3️⃣ Instale as dependências
+
+pip install flet
+
+
+### 4️⃣ Execute o projeto
+
+python main.py ou flet run
