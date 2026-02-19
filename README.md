@@ -1,81 +1,73 @@
-# Mercado app
+# 🛒 Mini Market Flet
 
-## Run the app
+Sistema desktop de gerenciamento de vendas desenvolvido em Python utilizando o framework Flet para interface gráfica e SQLite como banco de dados local.
 
-### uv
+O projeto simula o funcionamento de um mini mercado, permitindo seleção de produtos, gerenciamento de carrinho e finalização de vendas com persistência em banco de dados.
 
-Run as a desktop app:
+---
 
-```
-uv run flet run
-```
+## 🎯 Objetivo Acadêmico
 
-Run as a web app:
+Este projeto foi desenvolvido com o objetivo de:
 
-```
-uv run flet run --web
-```
+- Praticar arquitetura modular em Python
+- Aplicar Programação Orientada a Objetos
+- Trabalhar separação de responsabilidades (views, services, components)
+- Utilizar SQLite para persistência de dados
+- Implementar lógica de negócio isolada da interface
+- Simular fluxo real de sistema comercial
 
-### Poetry
+---
 
-Install dependencies from `pyproject.toml`:
+## 🧱 Estrutura do Projeto
 
-```
-poetry install
-```
+MINI-MARKET-FLET/
+│
+├── components/ # Componentes reutilizáveis (cards, botões, navbar)
+├── database/ # Configuração e acesso ao banco de dados
+├── services/ # Regras de negócio (vendas, carrinho, produtos)
+├── utils/ # Funções auxiliares e constantes
+├── views/ # Telas da aplicação
+│
+├── main.py # Ponto de entrada da aplicação
+├── router.py # Controle de navegação
+├── mercado.db # Banco de dados SQLite
+└── pyproject.toml
 
-Run as a desktop app:
 
-```
-poetry run flet run
-```
+---
 
-Run as a web app:
+## 🔧 Funcionalidades
 
-```
-poetry run flet run --web
-```
+- Listagem de produtos
+- Seleção de produtos
+- Adição e remoção do carrinho
+- Cálculo automático do total
+- Finalização de venda
+- Histórico de vendas
+- Organização em múltiplas camadas
 
-For more details on running the app, refer to the [Getting Started Guide](https://flet.dev/docs/getting-started/).
+---
 
-## Build the app
+## 🛠 Tecnologias Utilizadas
 
-### Android
+- Python 3.x
+- Flet
+- SQLite
+- Arquitetura modular
 
-```
-flet build apk -v
-```
+---
 
-For more details on building and signing `.apk` or `.aab`, refer to the [Android Packaging Guide](https://flet.dev/docs/publish/android/).
+## 🧠 Conceitos Aplicados
 
-### iOS
+- Separação de camadas
+- Services para regra de negócio
+- Componentização de interface
+- Manipulação de banco relacional
+- Organização orientada a domínio simples
 
-```
-flet build ipa -v
-```
+---
 
-For more details on building and signing `.ipa`, refer to the [iOS Packaging Guide](https://flet.dev/docs/publish/ios/).
+## 📌 Observações
 
-### macOS
-
-```
-flet build macos -v
-```
-
-For more details on building macOS package, refer to the [macOS Packaging Guide](https://flet.dev/docs/publish/macos/).
-
-### Linux
-
-```
-flet build linux -v
-```
-
-For more details on building Linux package, refer to the [Linux Packaging Guide](https://flet.dev/docs/publish/linux/).
-
-### Windows
-
-```
-flet build windows -v
-```
-
-For more details on building Windows package, refer to the [Windows Packaging Guide](https://flet.dev/docs/publish/windows/).
+Projeto desenvolvido para fins de estudo e aprimoramento técnico.
