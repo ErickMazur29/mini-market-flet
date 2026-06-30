@@ -20,8 +20,15 @@ jobs:
       - name: Install Flet
         run: pip install flet==0.28.3
 
+      - name: Set UTF-8 code page
+        run: chcp 65001
+        shell: cmd
+
       - name: Build executable
         run: flet build windows
+        env:
+          PYTHONIOENCODING: utf-8
+          PYTHONUTF8: "1"
 
       - name: Zip build output
         run: powershell Compress-Archive -Path build/windows/* -DestinationPath mercado-windows.zip
